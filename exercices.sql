@@ -44,12 +44,49 @@ WHERE m.representation_id = r.num_representation
 exercice 1 d
 
 -- Donner la liste des titres des représentations, les lieux et les tarifs pour la journée du 14/09/2014.
+
 -- AND Remplace WHERE car on ne peut en mettre q'un
 
 SELECT r.titre_representation, p.tarif
 FROM representation r, programmer p
 WHERE r.num_representation = p.representation_id
 AND p.date = '2014-09-14'
+
+exercice 2 a
+
+-- a) Quel est le nombre total d'étudiants ?
+
+-- En SQL, la fonction d’agrégation COUNT() permet de compter le nombre d’enregistrement dans une table.
+
+SELECT COUNT(e.id_etudiant)
+FROM etudiant e
+
+exercice 2 b
+
+-- Quelles sont, parmi l'ensemble des notes, la note la plus haute et la note la plus basse ?
+
+-- MAX()La fonction d’agrégation MAX() permet de retourner la valeur maximale d’une colonne dans un set d’enregistrement.
+-- MIN()La fonction d’agrégation MIN() permet de retourner la valeur minimale d’une colonne dans un set d’enregistrement.
+
+SELECT MAX(e.note), MIN(e.note)
+FROM evaluer e
+
+exercice 2 c
+
+-- Quelles sont les moyennes de chaque étudiant dans chacune des matières ? (utilisez CREATE VIEW)
+-- AVG La fonction d’agrégation AVG() dans le langage SQL permet de calculer une valeur moyenne sur un ensemble d’enregistrement de type numérique et non nul.
+
+SELECT AVG(e.note)
+FROM evaluer e
+
+
+
+
+
+
+
+
+
 
 
 
