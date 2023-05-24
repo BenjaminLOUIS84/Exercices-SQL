@@ -25,4 +25,34 @@ exercice 1 b
 -- La commande WHERE dans une requête SQL permet d’extraire les lignes d’une base de données qui respectent une condition.
 -- Cela permet d’obtenir uniquement les informations désirées.
 
+SELECT r.titre_representation
+FROM representation r
+WHERE r.lieu = "Opéra Bastille"
+
+exercice 1 c
+
+-- Donner la liste des noms des musiciens et des titres des représentations auxquelles ils participent
+
+-- Faire 1 jointure quand on utilise 2 tables (2 pour 3 tables ...)
+-- Elles se font entre la clé primaire et la clé étrangère
+
+SELECT m.nom, r.titre_representation
+FROM musicien m, representation r
+WHERE m.representation_id = r.num_representation
+
+
+exercice 1 d
+
+-- Donner la liste des titres des représentations, les lieux et les tarifs pour la journée du 14/09/2014.
+
+
+
+
+
+
+
+
+
+
+
 
