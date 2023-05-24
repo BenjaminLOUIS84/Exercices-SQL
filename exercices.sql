@@ -44,8 +44,12 @@ WHERE m.representation_id = r.num_representation
 exercice 1 d
 
 -- Donner la liste des titres des représentations, les lieux et les tarifs pour la journée du 14/09/2014.
+-- AND Remplace WHERE car on ne peut en mettre q'un
 
-
+SELECT r.titre_representation, p.tarif
+FROM representation r, programmer p
+WHERE r.num_representation = p.representation_id
+AND p.date = '2014-09-14'
 
 
 
