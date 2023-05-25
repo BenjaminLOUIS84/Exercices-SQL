@@ -130,14 +130,14 @@ SELECT
 
 FROM moyEtu
 
---On peut remplacer l'alias de la vue par le select complet de celle ci
+--On peut remplacer l'alias moyEtu de la vue par le select complet de celle ci
 	-- ( 
 	-- 	SELECT
 	-- 		etu.n_etudiant,
 	-- 		etu.nom,
 	-- 		etu.prenom,
 	-- 		m.libellemat,
-	-- 		AVG(eva.note) AS MoyEtu
+	-- 		AVG(eva.note) AS moyEtu
 	-- 	FROM 
 	-- 		etudiant etu,
 	-- 		evaluer eva,
