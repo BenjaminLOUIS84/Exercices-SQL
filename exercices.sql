@@ -85,6 +85,8 @@ exercice 2 c
 
 -- CREATE VIEW (on inscrit un nom qui fait référence à ce que l'on veut afficher)
 -- Afin de créer une table virtuelle moyenne_etudiant (AS) de
+-- L'intérêt de créer une VIEW est de pouvoir stocker un select pour le réutiliser plus tard
+
 -- AS est un alias
 -- etu - eva - m sont aussi des alias
 -- AVG La fonction d’agrégation AVG() dans le langage SQL permet de calculer une valeur moyenne sur un ensemble d’enregistrement de type numérique et non nul.
@@ -93,13 +95,13 @@ exercice 2 c
 
 CREATE VIEW moyenne_etudiant AS
 
-SELECT etu.n_etudiant, etu.nom, etu.prenom, m.libellemat, AVG(eva.note)
+SELECT etu.n_etudiant, etu.nom, etu.prenom, m.libellemat, AVG(eva.note) AS moyEtu
 FROM etudiant etu, evaluer eva, matiere m
 
 WHERE eva.n_etudiant = etu.n_etudiant
 AND eva.codemat = m.codemat
 
-GROUP BY etu.n_etudiant, etu.nom, etu.prenom, m.libellemat;
+GROUP BY etu.n_etudiant, etu.nom, etu.prenom, m.libellemat
 
 exercice 2 d
 
@@ -107,7 +109,7 @@ exercice 2 d
 
 CREATE VIEW moyenne_matiere AS
 
-SELECT m.libellemat, AVG(eva.note)
+SELECT m.libellemat, AVG(eva.note) AS moyMat
 FROM matiere m, evaluer eva
 WHERE eva.codemat = m.codemat
 
@@ -116,8 +118,48 @@ GROUP BY m.libellemat
 exercice 2 e
 
 -- Quelle est la moyenne générale de chaque étudiant ? 
+--  (utilisez CREATE VIEW + cf. question 3)
 
 -- Ajouter les coeficients pour le calcul de la moyenne générale
+CREATE VIEW moyenne_generale AS
+SELECT
+	etu.n_etudiant,
+	etu.nom,
+	etu.prenom,
+	SUM(moyMat*coeffmat)/SUM(coeffmat) AS moyGen
+
+FROM moyEtu
+
+--On peut remplacer l'alias de la vue par le select complet de celle ci
+	-- ( 
+	-- 	SELECT
+	-- 		etu.n_etudiant,
+	-- 		etu.nom,
+	-- 		etu.prenom,
+	-- 		m.libellemat,
+	-- 		AVG(eva.note) AS MoyEtu
+	-- 	FROM 
+	-- 		etudiant etu,
+	-- 		evaluer eva,
+	-- 		matiere m
+	-- 	WHERE
+	-- 		eva.n_etudiant = etu.n_etudiant
+	-- 	AND
+	-- 		eva.codemat = m.codemat
+	-- 	GROUP BY
+	-- 		etu.n_etudiant,
+	-- 		etu.nom,
+	-- 		etu.prenom,
+	-- 		m.libellemat
+	-- )AS Saw
+		
+GROUP BY
+	etu.n_etudiant,
+	etu.nom,
+	etu.prenom
+
+
+
 
 
 
