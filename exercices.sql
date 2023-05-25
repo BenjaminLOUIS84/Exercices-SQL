@@ -58,7 +58,7 @@ exercice 2 a
 
 -- En SQL, la fonction d’agrégation COUNT() permet de compter le nombre d’enregistrement dans une table.
 
-SELECT COUNT(e.id_etudiant)
+SELECT COUNT(e.n_etudiant)
 FROM etudiant e
 
 exercice 2 b
@@ -71,13 +71,57 @@ exercice 2 b
 SELECT MAX(e.note), MIN(e.note)
 FROM evaluer e
 
+SELECT n_etudiant, MAX(e.note), MIN(e.note)
+FROM evaluer e
+GROUP BY n_etudiant
+
+-- GROUP BY Permet d'afficher la note max et min de chaque numéro d'étudiant
+
 exercice 2 c
 
 -- Quelles sont les moyennes de chaque étudiant dans chacune des matières ? (utilisez CREATE VIEW)
+
+-- Avant de créer une VIEW on teste le SELECT pour vérifier si tout est ok
+
+-- CREATE VIEW (on inscrit un nom qui fait référence à ce que l'on veut afficher)
+-- Afin de créer une table virtuelle moyenne_etudiant (AS) de
+-- AS est un alias
+-- etu - eva - m sont aussi des alias
 -- AVG La fonction d’agrégation AVG() dans le langage SQL permet de calculer une valeur moyenne sur un ensemble d’enregistrement de type numérique et non nul.
 
-SELECT AVG(e.note)
-FROM evaluer e
+--GROUP BY Pour grouper plusieurs résultats et utiliser une fonction de totaux sur un groupe de résultat. 
+
+CREATE VIEW moyenne_etudiant AS
+
+SELECT etu.n_etudiant, etu.nom, etu.prenom, m.libellemat, AVG(eva.note)
+FROM etudiant etu, evaluer eva, matiere m
+
+WHERE eva.n_etudiant = etu.n_etudiant
+AND eva.codemat = m.codemat
+
+GROUP BY etu.n_etudiant, etu.nom, etu.prenom, m.libellemat;
+
+exercice 2 d
+
+-- Quelles sont les moyennes par matière ? (cf. question c)
+
+CREATE VIEW moyenne_matiere AS
+
+SELECT m.libellemat, AVG(eva.note)
+FROM matiere m, evaluer eva
+WHERE eva.codemat = m.codemat
+
+GROUP BY m.libellemat
+
+exercice 2 e
+
+-- Quelle est la moyenne générale de chaque étudiant ? 
+
+-- Ajouter les coeficients pour le calcul de la moyenne générale
+
+
+
+
 
 
 
