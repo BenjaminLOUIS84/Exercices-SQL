@@ -57,22 +57,16 @@ GROUP BY m.libellemat
 
 exercice 2 e-- Quelle est la moyenne générale de chaque étudiant ? (utilisez CREATE VIEW + cf. question 3)
 
-
 CREATE VIEW moyenne_generale AS
-SELECT etu.n_etudiant, etu.nom, etu.prenom, SUM(moyMat*coeffmat)/SUM(coeffmat) AS moyGen
+SELECT etu.nom, etu.prenom, SUM(moyMat*coeffmat)/SUM(coeffmat) AS moyGen            --SUM() Fonction pour calculer la somme
 FROM moyEtu                                                                         --On peut remplacer l'alias moyEtu de la vue par le select complet de celle-ci		
-GROUP BY etu.n_etudiant, etu.nom, etu.prenom
+GROUP BY etu.nom, etu.prenom
 
-
-
-
-CREATE OR REPLACE VIEW moyenne_etudiant AS -- Création d'une view moyenne_etudiant
-SELECT etudiant.nom, etudiant.prenom,  AVG(evaluer.note) -- On demande le nom ainsi qu'une moyenne de notes
-FROM etudiant, evaluer -- à partir des bases étudiant et évaluer
-WHERE etudiant.id_etudiant = evaluer.id_etudiant -- en faisant le lien entre la table etudiant et evaluer
-GROUP BY etudiant.nom, etudiant.prenom -- et on fait cette opération pour chaque étudiant. C'est ce qui permet d'afficher la moyenne pour 1 étudiant donné.
-
-
+-- CREATE OR REPLACE VIEW moyenne_etudiant AS                                       -- Création d'une view moyenne_etudiant
+-- SELECT etu.nom, etu.prenom,  AVG(evaluer.note) AS moyGen                         -- On demande le nom ainsi qu'une moyenne de notes
+-- FROM etudiant, evaluer                                                           -- à partir des bases étudiant et évaluer
+-- WHERE etu.n_etudiant = evaluer.n_etudiant                                        -- en faisant le lien entre la table etudiant et evaluer
+-- GROUP BY etu.nom, etu.prenom                                                     -- et on fait cette opération pour chaque étudiant. C'est ce qui permet d'afficher la moyenne pour 1 étudiant donné.
 
 exercice 2 f-- Quelle est la moyenne générale de la promotion ? (cf. question e)
 
