@@ -251,6 +251,21 @@ ORDER BY ep.datepreuve ASC
 
 exercice 4 n--Liste des notes en précisant pour chacune le nom et le prénom de l'étudiant qui l'a obtenue
 
+SELECT etu.nom, etu.prenom, n.note
+FROM etudiant etu, notation n
+WHERE etu.numetu = n.numetu
+
+exercice 4 o--Liste des notes en précisant pour chacune le nom et le prénom de l'étudiant qui l'a obtenue et le libellé de la matière concernée
+
+SELECT etu.nom, etu.prenom, n.note, m.libelle
+FROM etudiant etu, notation n, matiere m
+WHERE etu.numetu = n.numetu
+AND m.numepreuve = n.numepreuve
+
+exercice 4 p--Nom et prénom des étudiants qui ont obtenu au moins une note égale à 20
+
+
+
 
 
 
