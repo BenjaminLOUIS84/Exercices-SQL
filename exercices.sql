@@ -71,10 +71,10 @@ FROM evaluer
 exercice 2 g--Quels sont les étudiants qui ont une moyenne générale supérieure ou égale à la moyenne générale de la promotion ? (cf. question e)
 
 CREATE VIEW moyenne_sup AS
-SELECT etu.prenom, mge.moyGenEtu, mp.moyennePromo
+SELECT etu.prenom, mge.moyGenEtu, mp.moyennePromo                           -- on récupère le prénom de l'étudiant sa moyenne générale ainsi que la moyenne de la promo depuis la précédente View. 
 FROM etudiant etu, moyenne_generale_etudiant mge, moyenne_promo mp
-WHERE mge.moyGenEtu >= mp.moyennePromo
-AND etu.prenom = mge.prenom
+WHERE mge.moyGenEtu >= mp.moyennePromo                                      -- on créer 2 conditions WHERE comparer la moyenne générale à la moyenne de la promo 
+AND etu.prenom = mge.prenom                                                 -- AND afficher les élèves dont la moyenne générale est supérieur à la moyenne de la promo
 
 exercice 3 a--Numéros et libellés des articles dont le stock est inférieur à 10 
 
