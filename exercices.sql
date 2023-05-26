@@ -264,6 +264,38 @@ AND m.numepreuve = n.numepreuve
 
 exercice 4 p--Nom et prénom des étudiants qui ont obtenu au moins une note égale à 20
 
+SELECT etu.nom, etu.prenom, m.libelle, n.note
+FROM etudiant etu, notation n, matiere m
+WHERE etu.numetu = n.numetu
+AND n.numepreuve = m.numepreuve
+AND n.note = 20
+
+exercice 4 q--Moyennes des notes de chaque étudiant (indiquer le nom et le prénom)
+
+CREATE VIEW Notes_des_Eleves AS
+SELECT etu.nom, etu.prenom, m.libelle, ROUND(AVG(n.note), 2) AS Notes
+FROM etudiant etu, notation n, matiere m
+WHERE etu.numetu = n.numetu
+AND n.numepreuve = m.numepreuve
+GROUP BY etu.nom, etu.prenom, m.libelle
+
+SELECT etu.prenom, ROUND(AVG(n.note), 2) AS Moyenne
+FROM etudiant etu, notation n
+WHERE etu.numetu = n.numetu
+GROUP BY etu.numetu
+
+exercice 4 r--Moyennes des notes de chaque étudiant (indiquer le nom et le prénom), classées de la meilleure à la moins bonne
+
+SELECT etu.prenom, ROUND(AVG(n.note), 2) AS Moyenne
+FROM etudiant etu, notation n
+WHERE etu.numetu = n.numetu
+GROUP BY etu.numetu
+ORDER BY Moyenne DESC
+
+exercice 4 s--Moyennes des notes pour les matières (indiquer le libellé) comportant plus d'une épreuve
+
+
+
 
 
 
