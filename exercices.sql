@@ -56,16 +56,11 @@ GROUP BY m.libellemat
 
 exercice 2 e-- Quelle est la moyenne générale de chaque étudiant ? (utilisez CREATE VIEW + cf. question 3)
 
-CREATE VIEW moyenne_generale AS
-SELECT etu.nom, etu.prenom, SUM(moyMat*coeffmat)/SUM(coeffmat) AS moyGen            --SUM() Fonction pour calculer la somme
-FROM moyEtu                                                                         --On peut remplacer l'alias moyEtu de la vue par le select complet de celle-ci		
-GROUP BY etu.nom, etu.prenom
-
--- CREATE OR REPLACE VIEW moyenne_etudiant AS                                       -- Création d'une view moyenne_etudiant
--- SELECT etu.nom, etu.prenom,  AVG(evaluer.note) AS moyGen                         -- On demande le nom ainsi qu'une moyenne de notes
--- FROM etudiant, evaluer                                                           -- à partir des bases étudiant et évaluer
--- WHERE etu.n_etudiant = evaluer.n_etudiant                                        -- en faisant le lien entre la table etudiant et evaluer
--- GROUP BY etu.nom, etu.prenom                                                     -- et on fait cette opération pour chaque étudiant. C'est ce qui permet d'afficher la moyenne pour 1 étudiant donné.
+CREATE VIEW moyenne_generale_etudiant AS
+SELECT etu.nom, etu.prenom, AVG(eva.note) AS moyGenEtu
+FROM etudiant etu, evaluer eva
+WHERE etu.n_etudiant = eva.n_etudiant
+GROUP BY etu.nom, etu.prenom                                                -- et on fait cette opération pour chaque étudiant. C'est ce qui permet d'afficher la moyenne pour 1 étudiant donné.
 
 exercice 2 f-- Quelle est la moyenne générale de la promotion ? (cf. question e)
 
@@ -75,10 +70,13 @@ FROM evaluer
 
 exercice 2 g--Quels sont les étudiants qui ont une moyenne générale supérieure ou égale à la moyenne générale de la promotion ? (cf. question e)
 
+CREATE VIEW moyenne_sup AS
+SELECT etu.prenom, mge.moyGenEtu, mp.moyennePromo
+FROM etudiant etu, moyenne_generale_etudiant mge, moyenne_promo mp
+WHERE mge.moyGenEtu >= mp.moyennePromo
+AND etu.prenom = mge.prenom
 
-
-
-
+exercice 3 a--Numéros et libellés des articles dont le stock est inférieur à 10 
 
 
 
