@@ -46,8 +46,6 @@ exercice 2 b-- Quelles sont, parmi l'ensemble des notes, la note la plus haute e
 
 SELECT MAX(e.note), MIN(e.note)                                                     -- MAX() et MIN() sont des fonctions d’agrégation permettent de retourner la valeur maximale et minimale d’une colonne dans un set d’enregistrement.
 FROM evaluer e
-SELECT n_etudiant, MAX(e.note), MIN(e.note)
-FROM evaluer e
 GROUP BY n_etudiant                                                                 -- GROUP BY Permet d'afficher la note max et min de chaque numéro d'étudiant
 
 exercice 2 c-- Quelles sont les moyennes de chaque étudiant dans chacune des matières ? (utilisez CREATE VIEW)
@@ -113,20 +111,60 @@ exercice 3 c--Liste des fournisseurs dont on ne connaît pas l'adresse
 
 SELECT f.nom_four, f.adresse_four
 FROM fournisseurs f
-WHERE f.adresse_four IS NULL
+WHERE f.adresse_four IS NULL                                                --Dans le langage SQL, l’opérateur IS permet de filtrer les résultats qui contiennent la valeur NULL.
+                                                                            --IS NULL permet de filtrer les références qui n'ont pas d'adresse (Valeur par défaut NULL)
 
 exercice 3 d--Liste des fournisseurs dont le nom commence par "STE"
 
+SELECT f.nom_four
+FROM fournisseurs f
+WHERE f.nom_four LIKE 'STE%'                                                --L’opérateur LIKE est utilisé dans la clause WHERE des requêtes SQL.
+                                                                            --Ce mot-clé permet d’effectuer une recherche sur un modèle particulier.
+                                                                            --'STE%' permet de filtrer les références qui commencent par STE
+
+exercice 3 e--Noms et adresses des fournisseurs qui proposent des articles pour lesquels le délai d'approvisionnement est supérieur à 20 jours 
+
+SELECT f.nom_four, f.adresse_four, f.ville_four, ach.delai
+FROM fournisseurs f, acheter ach
+WHERE ach.delai>20                                                          --Pour afficher les délais >20 jours
+AND f.n_four = ach.n_four                                                   --Pour afficher que les fournisseurs concernés
+
+exercice 3 f--Nombre d'articles référencés
+
+SELECT COUNT(art.n_art)                                                     --COUNT() Pour compter le nombre de références 
+FROM articles art
+
+exercice 3 g--Valeur du stock
+
+SELECT SUM(art.prixinvent)                                                  --SUM() Pour calculer la somme de tous les (prixinvent) des références pour obtenir la valeur totale du stock 
+FROM articles art
+
+exercice 3 h--Numéros et libellés des articles triés dans l'ordre décroissant des stocks
+
+SELECT art.n_art, art.libelle
+FROM articles art
+ORDER BY art.n_art DESC                                                     --La commande ORDER BY permet de trier les lignes dans un résultat d’une requête SQL.
+                                                                            --Il est possible de trier les données sur une ou plusieurs colonnes, par ordre ascendant ASC ou descendant DESC.
+
+exercice 3 i--Liste pour chaque article (numéro et libellé) du prix d'achat maximum, minimum et moyen 
+
+SELECT art.n_art, art.libelle,                                              --On rentre toutes les valeurs que l'on souhaite afficher
+    MAX(ach.prix_achat), MIN(ach.prix_achat), ROUND(AVG(ach.prix_achat),2)  --On peut également ajouter des formules de calcul ROUND(,2) permet d'arrondir après la virgule
+
+FROM articles art, acheter ach                                              --On inscrit les 2 tables employées pour cette requête
+WHERE art.n_art = ach.n_art                                                 --On fait la jointure entre la clé primaire et la clé étrangère d'une même valeur ici le numéro des références
+GROUP BY art.n_art, art.libelle                                             --On permet d'afficher avec GROUP BY les numéros et les libellés des références 
+
+exercice 3 j--Délai moyen pour chaque fournisseur proposant au moins 2 articles
+
+SELECT art.libelle, f.nom_four, ach.delai, ROUND(AVG(ach.delai)) AS delai_moyen 
+FROM articles art, fournisseurs f, acheter ach
+WHERE f.n_four = ach.n_four 
+AND art.n_art = ach.n_art
+GROUP BY art.libelle, f.nom_four, ach.delai
 
 
-
-
-
-
-
-
-
-
+-- EXERCICE 4
 
 
 
