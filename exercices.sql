@@ -294,10 +294,37 @@ ORDER BY Moyenne DESC
 
 exercice 4 s--Moyennes des notes pour les matières (indiquer le libellé) comportant plus d'une épreuve
 
+SELECT mat.libelle, ROUND(AVG(n.note), 2) AS Moyenne_Matieres
+FROM matiere mat, notation n
+WHERE mat.numepreuve = n.numepreuve
+GROUP BY mat.libelle
+
+exercice 4 t--Moyennes des notes obtenues aux épreuves (indiquer le numéro d'épreuve) où moins de 6 étudiants ont été notés
+
+SELECT ep.numepreuve, ROUND(AVG(n.note), 2) AS Moyenne_Epreuves
+FROM epreuve ep, notation n
+WHERE ep.numepreuve = n.numepreuve
+GROUP BY ep.numepreuve
+
+-- EXERCICE 5
+
+-- USINE (NumU, NomU, VilleU)
+-- PRODUIT (NumP, NomP, Couleur, Poids)
+-- FOURNISSEUR (NumF, NomF, Statut, VilleF)
+-- LIVRAISON (NumP, NumU, NumF, Quantité)
+
+exercice 5 a--Ajouter un nouveau fournisseur avec les attributs de votre choix
 
 
 
 
+
+
+
+
+
+exercice 5 b--Supprimer tous les produits de couleur noire et de numéros compris entre 100 et 1999
+exercice 5 c--Changer la ville du fournisseur 3 par Mulhous
 
 
 
