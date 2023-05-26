@@ -210,7 +210,56 @@ exercice 4 g--Liste des épreuves dont la date se situe entre le 1er janvier et 
 
 SELECT ep.numepreuve, ep.datepreuve
 FROM epreuve ep
-WHERE ep.datepreuve BETWEEN '2014-01-01' AND '2014-06-30'                       --L’opérateur BETWEEN est utilisé dans une requête SQL pour sélectionner un intervalle de données dans une requête utilisant WHERE.
+WHERE ep.datepreuve BETWEEN '2014-01-01' AND '2014-06-30'                       --L’opérateur BETWEEN est utilisé dans une requête SQL pour sélectionner un intervalle
+                                                                                --de données dans une requête utilisant WHERE.
+
+exercice 4 h--Nom, prénom et ville des étudiants dont la ville contient la chaîne "ll"
+
+SELECT etu.nom, etu.prenom, etu.ville
+FROM etudiant etu
+WHERE etu.ville LIKE '%||'
+
+exercice 4 i--Prénoms des étudiants de nom Dupont, Durand ou Martin
+
+SELECT etu.nom, etu.prenom
+FROM etudiant etu
+WHERE etu.nom IN ('MARTIN','DUPONT','DURAND')                                   --L’opérateur logique IN dans SQL  s’utilise avec la commande WHERE pour vérifier 
+                                                                                --si une colonne est égale à une des valeurs comprise dans set de valeurs déterminés.
+
+exercice 4 j--Somme des coefficients de toutes les matières
+
+SELECT ROUND(SUM(m.coef),2) AS Somme_des_coef, ROUND(SUM(m.coef),2)*100 AS '%'
+FROM matiere m
+
+exercice 4 k--Nombre total d'épreuves
+
+SELECT COUNT(ep.numepreuve) AS Nombre_Epreuves
+FROM epreuve ep
+
+exercice 4 l--Nombre de notes indéterminées (NULL)
+
+SELECT COUNT(n.note IS NULL) AS Nombre_de_Notes_NULL                            --Compter toute les notes en incluant les notes NULL
+FROM notation n
+WHERE n.note IS NULL                                                            --Filtrer les notes NULL pour afficher celles-ci
+
+exercice 4 m--Liste des épreuves (numéro, date et lieu) incluant le libellé de la matière
+
+SELECT ma.libelle, ep.numepreuve, ep.datepreuve, ep.lieu
+FROM matiere ma, epreuve ep
+WHERE ma.numepreuve = ep.numepreuve
+ORDER BY ep.datepreuve ASC
+
+exercice 4 n--Liste des notes en précisant pour chacune le nom et le prénom de l'étudiant qui l'a obtenue
+
+
+
+
+
+
+
+
+
+
 
 
 
