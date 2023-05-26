@@ -1,5 +1,11 @@
 -- REQUETES SQL Page Web de référence: sql.ch
 
+-- EXERCICE 1
+-- REPRESENTATION (N°REPRESENTATION, TITRE_REPRESENTATION, LIEU) 
+-- MUSICIEN (NOM, N°REPRESENTATION*) 
+-- PROGRAMMER (DATE, N°REPRESENTATION*, TARIF)
+
+
 exercice 1 a -- Donner la liste des titres des représentations 
 
 SELECT r.titre_representation                                                       -- SELECT: nom de la colone ou des colones Utilisé pour lire des données issues de la base de données en retournant des enregistrements dans un tableau de résultat.
@@ -23,6 +29,13 @@ SELECT r.titre_representation, p.tarif
 FROM representation r, programmer p
 WHERE r.num_representation = p.representation_id
 AND p.date = '2014-09-14'                                                           -- AND Remplace WHERE car on ne peut en mettre q'un
+
+
+-- EXERCICE 2
+-- ETUDIANT (N°ETUDIANT, NOM, PRENOM) 
+-- MATIERE (CODEMAT, LIBELLEMAT, COEFFMAT) 
+-- EVALUER (N°ETUDIANT*, CODEMAT*, DATE, NOTE)
+
 
 exercice 2 a-- Quel est le nombre total d'étudiants ?
 
@@ -76,7 +89,36 @@ FROM etudiant etu, moyenne_generale_etudiant mge, moyenne_promo mp
 WHERE mge.moyGenEtu >= mp.moyennePromo                                      -- on créer 2 conditions WHERE comparer la moyenne générale à la moyenne de la promo 
 AND etu.prenom = mge.prenom                                                 -- AND afficher les élèves dont la moyenne générale est supérieur à la moyenne de la promo
 
+
+-- EXERCICE 3
+-- ARTICLES (NOART, LIBELLE, STOCK, PRIXINVENT)
+-- FOURNISSEURS (NOFOUR, NOMFOUR, ADRFOUR, VILLEFOUR)
+-- ACHETER (NOFOUR#, NOART#, PRIXACHAT, DELAI)
+
+
 exercice 3 a--Numéros et libellés des articles dont le stock est inférieur à 10 
+
+SELECT a.n_art, a.libelle
+FROM articles a
+WHERE a.stock <10
+
+exercice 3 b--Liste des articles dont le prix d'inventaire est compris entre 100 et 300
+
+SELECT a.libelle, a.prixinvent
+FROM articles a
+WHERE a.prixinvent >100
+AND a.prixinvent <300
+
+exercice 3 c--Liste des fournisseurs dont on ne connaît pas l'adresse 
+
+SELECT f.nom_four, f.adresse_four
+FROM fournisseurs f
+WHERE f.adresse_four IS NULL
+
+exercice 3 d--Liste des fournisseurs dont le nom commence par "STE"
+
+
+
 
 
 
