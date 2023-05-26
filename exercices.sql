@@ -157,14 +157,65 @@ GROUP BY art.n_art, art.libelle                                             --On
 
 exercice 3 j--Délai moyen pour chaque fournisseur proposant au moins 2 articles
 
-SELECT art.libelle, f.nom_four, ach.delai, ROUND(AVG(ach.delai)) AS delai_moyen 
+CREATE VIEW fournisseurs_produits_delai AS                                  --Créer une vue d'un tableau dans lequel il y a les fournisseurs, les produits et les delais
+SELECT art.libelle, f.nom_four, ach.delai                                   --Afin de conserver une trace des fournisseurs qui proposent plusieurs produits
 FROM articles art, fournisseurs f, acheter ach
 WHERE f.n_four = ach.n_four 
 AND art.n_art = ach.n_art
 GROUP BY art.libelle, f.nom_four, ach.delai
 
+SELECT f.nom_four, ROUND(AVG(ach.delai)) AS delai_moyen                     --Pour afficher un tableau qui présente les fournisseurs et leurs délais moyens respectif
+FROM fournisseurs f, acheter ach
+WHERE f.n_four = ach.n_four
+GROUP BY f.nom_four
 
 -- EXERCICE 4
+
+exercice 4 a--Liste de tous les étudiants
+
+SELECT et.numetu, et.nom, et.prenom
+FROM etudiant et
+
+exercice 4 b--Liste de tous les étudiants, classée par ordre alphabétique inverse
+
+SELECT et.numetu, et.nom, et.prenom
+FROM etudiant et
+ORDER BY et.nom DESC
+
+exercice 4 c--Libellé et coefficient (exprimé en pourcentage) de chaque matière
+
+SELECT mat.libelle, mat.coef, ROUND(SUM(mat.coef*100)) AS '%'
+FROM matiere mat
+WHERE mat.codemat < 4
+GROUP BY mat.libelle, mat.coef
+
+exercice 4 d--Nom et prénom de chaque étudiant
+
+SELECT et.nom, et.prenom
+FROM etudiant et
+
+exercice 4 e--Nom et prénom des étudiants domiciliés à Lyon
+
+SELECT et.nom, et.prenom, et.rue, et.cp, et.ville
+FROM etudiant et
+WHERE et.ville = "LYON"
+
+exercice 4 f--Liste des notes supérieures ou égales à 10
+
+SELECT n.note
+FROM notation n
+WHERE n.note >= 10
+
+exercice 4 g--Liste des épreuves dont la date se situe entre le 1er janvier et le 30 juin 2014
+
+SELECT ep.numepreuve, ep.datepreuve
+FROM epreuve ep
+WHERE ep.datepreuve BETWEEN '2014-01-01' AND '2014-06-30'                       --L’opérateur BETWEEN est utilisé dans une requête SQL pour sélectionner un intervalle de données dans une requête utilisant WHERE.
+
+
+
+
+
 
 
 
