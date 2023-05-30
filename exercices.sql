@@ -19,9 +19,20 @@ CREATE TABLE representation
 -- MUSICIEN (NOM, N°REPRESENTATION*) 
 CREATE TABLE musicien
 (
-    nom VARCHAR(50) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nom VARCHAR(50) PRIMARY KEY NOT NULL,
     representation_id INT, CONSTRAINT fk_musicien_representation
-    FOREIGN KEY () REFERENCES 
+    FOREIGN KEY (representation_id) REFERENCES representation (num_representation)
+)
+
+-- PROGRAMMER (DATE, N°REPRESENTATION*, TARIF) 
+CREATE TABLE programmer
+(
+    date DATETIME,
+    tarif INT,
+    representation_id INT, CONSTRAINT fk_representation_id
+    FOREIGN KEY (representation_id) REFERENCES representation (num_representation),
+    musicien_id VARCHAR(50), CONSTRAINT fk_musicien_id
+    FOREIGN KEY (musicien_id) REFERENCES musicien (nom)
 )
 
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
@@ -57,6 +68,30 @@ AND p.date = '2014-09-14'                                                       
 -- ETUDIANT (N°ETUDIANT, NOM, PRENOM) 
 -- MATIERE (CODEMAT, LIBELLEMAT, COEFFMAT) 
 -- EVALUER (N°ETUDIANT*, CODEMAT*, DATE, NOTE)
+
+CREATE TABLE etudiant
+(
+    n_etudiant INT PRIMARY KEY NOT NULL,
+    nom VARCHAR(50),
+    prenom VARCHAR(50)
+)
+
+CREATE TABLE matiere
+(
+    codemat VARCHAR(50) PRIMARY KEY NOT NULL,
+    libellemat VARCHAR(50),
+    coeffmat INT
+)
+
+CREATE TABLE evaluer
+(
+    n_etudiant INT PRIMARY KEY NOT NULL, CONSTRAINT fk_n_etudiant
+    FOREIGN KEY (n_etudiant) REFERENCES etudiant (n_etudiant),
+    codemat VARCHAR(50) CONSTRAINT fk_codemat
+    FOREIGN KEY (codemat) REFERENCES matiere (codemat),
+    date INT, PRIMARY KEY NOT NULL,
+    note INT
+)
 
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
@@ -117,6 +152,32 @@ AND etu.prenom = mge.prenom                                                 -- A
 -- ARTICLES (NOART, LIBELLE, STOCK, PRIXINVENT)
 -- FOURNISSEURS (NOFOUR, NOMFOUR, ADRFOUR, VILLEFOUR)
 -- ACHETER (NOFOUR#, NOART#, PRIXACHAT, DELAI)
+
+CREATE TABLE articles
+(
+    n_art INT PRIMARY KEY NOT NULL,
+    libelle VARCHAR(50),
+    stock INT,
+    prixinvent INT
+)
+
+CREATE TABLE fournisseurs
+(
+    n_four INT PRIMARY KEY NOT NULL,
+    nom_four VARCHAR(50),
+    adresse_four VARCHAR(50),
+    ville_four VARCHAR(50)
+)
+
+CREATE TABLE acheter
+(
+    n_four INT PRIMARY KEY NOT NULL, CONSTRAINT fk_n_four
+    FOREIGN KEY (n_four) REFERENCES fournisseurs (n_four),
+    n_art INT PRIMARY KEY NOT NULL, CONSTRAINT fk_n_art
+    FOREIGN KEY (n_art) REFERENCES artilces (n_art),
+    prix_achat INT, 
+    delai INT
+)
 
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
@@ -198,6 +259,43 @@ GROUP BY f.nom_four
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 -- EXERCICE 4
+
+CREATE TABLE epreuve
+(
+    numepreuve INT PRIMARY KEY NOT NULL,
+    lieu CHAR(50),
+    datepreuve DATE
+)
+
+CREATE TABLE etudiant
+(
+    numetur INT PRIMARY KEY NOT NULL,
+    nom CHAR(50),
+    prenom CHAR(50),
+    rue CHAR(50),
+    cp CHAR(50),
+    ville CHAR(50),
+    datenaiss DATE
+)
+
+CREATE TABLE matiere
+(
+    codemat CHAR PRIMARY KEY NOT NULL,
+    libelle CHAR(50),
+    coef FLOAT,
+    numepreuve INT, CONSTRAINT fk_numepreuve
+    FOREIGN KEY (numepreuve) REFERENCES epreuve (numepreuve),
+)
+
+CREATE TABLE notation
+(
+    n_etu INT PRIMARY KEY NOT NULL, CONSTRAINT fk_n_etu
+    FOREIGN KEY (n_etu) REFERENCES etudiant (n_etu),
+    numepreuve INT PRIMARY KEY NOT NULL, CONSTRAINT fk_numepreuve
+    FOREIGN KEY (numepreuve) REFERENCES epreuve (numepreuve),
+    note FLOAT, 
+)
+
 
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
