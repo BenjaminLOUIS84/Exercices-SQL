@@ -1,10 +1,30 @@
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 -- REQUETES SQL Page Web de référence: sql.ch
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 -- EXERCICE 1
+
 -- REPRESENTATION (N°REPRESENTATION, TITRE_REPRESENTATION, LIEU) 
 -- MUSICIEN (NOM, N°REPRESENTATION*) 
 -- PROGRAMMER (DATE, N°REPRESENTATION*, TARIF)
 
+--REPRESENTATION (N°REPRESENTATION, TITRE_REPRESENTATION, LIEU)
+CREATE TABLE representation
+(
+    num_representation INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    titre_representation VARCHAR(50),
+    lieu VARCHAR(50)
+)
+
+-- MUSICIEN (NOM, N°REPRESENTATION*) 
+CREATE TABLE musicien
+(
+    nom VARCHAR(50) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    representation_id INT, CONSTRAINT fk_musicien_representation
+    FOREIGN KEY () REFERENCES 
+)
+
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 exercice 1 a -- Donner la liste des titres des représentations 
 
@@ -30,12 +50,15 @@ FROM representation r, programmer p
 WHERE r.num_representation = p.representation_id
 AND p.date = '2014-09-14'                                                           -- AND Remplace WHERE car on ne peut en mettre q'un
 
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 -- EXERCICE 2
+
 -- ETUDIANT (N°ETUDIANT, NOM, PRENOM) 
 -- MATIERE (CODEMAT, LIBELLEMAT, COEFFMAT) 
 -- EVALUER (N°ETUDIANT*, CODEMAT*, DATE, NOTE)
 
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 exercice 2 a-- Quel est le nombre total d'étudiants ?
 
@@ -87,12 +110,15 @@ FROM etudiant etu, moyenne_generale_etudiant mge, moyenne_promo mp
 WHERE mge.moyGenEtu >= mp.moyennePromo                                      -- on créer 2 conditions WHERE comparer la moyenne générale à la moyenne de la promo 
 AND etu.prenom = mge.prenom                                                 -- AND afficher les élèves dont la moyenne générale est supérieur à la moyenne de la promo
 
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 -- EXERCICE 3
+
 -- ARTICLES (NOART, LIBELLE, STOCK, PRIXINVENT)
 -- FOURNISSEURS (NOFOUR, NOMFOUR, ADRFOUR, VILLEFOUR)
 -- ACHETER (NOFOUR#, NOART#, PRIXACHAT, DELAI)
 
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 exercice 3 a--Numéros et libellés des articles dont le stock est inférieur à 10 
 
@@ -169,7 +195,11 @@ FROM fournisseurs f, acheter ach
 WHERE f.n_four = ach.n_four
 GROUP BY f.nom_four
 
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
+
 -- EXERCICE 4
+
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
 exercice 4 a--Liste de tous les étudiants
 
@@ -306,6 +336,8 @@ FROM epreuve ep, notation n
 WHERE ep.numepreuve = n.numepreuve
 GROUP BY ep.numepreuve
 
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
+
 -- EXERCICE 5
 
 -- USINE (NumU, NomU, VilleU)
@@ -313,18 +345,69 @@ GROUP BY ep.numepreuve
 -- FOURNISSEUR (NumF, NomF, Statut, VilleF)
 -- LIVRAISON (NumP, NumU, NumF, Quantité)
 
+-- USINE(NumU, NomU, VilleU)
+CREATE TABLE usine 
+(
+  numU INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  nomU VARCHAR(50),
+  villeU VARCHAR(50)
+)
+
+-- PRODUIT(NumP, NomP, Couleur, Poids)
+
+CREATE TABLE produit
+(
+  numP INT PRIMARY KEY NOT NULL AUTO_INCREMENT, 
+	nomP VARCHAR(50), 
+	couleur VARCHAR(50), 
+	poids FLOAT
+)
+
+-- FOURNISSEUR(NumF, NomF, Statut, VilleF)
+
+CREATE TABLE fournisseur
+(
+  numF INT PRIMARY KEY NOT NULL AUTO_INCREMENT, 
+  nomF VARCHAR(50), 
+  statut VARCHAR(10), 
+  villeF VARCHAR(50)
+)
+
+-- LIVRAISON(NumP, NumU, NumF, Quantité)
+
+CREATE TABLE livraison
+(
+  quantite INT,
+  numP_id INT,
+  numU_id INT,
+  numF_id INT,
+  CONSTRAINT fk_livraison_produit
+  FOREIGN KEY (numP_id) REFERENCES produit(numP),
+  CONSTRAINT fk_livraison_usine
+  FOREIGN KEY (numU_id) REFERENCES usine(numU),
+  CONSTRAINT fk_livraison_fournisseur
+  FOREIGN KEY (numF_id) REFERENCES fournisseur(numF)
+);
+
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
+
 exercice 5 a--Ajouter un nouveau fournisseur avec les attributs de votre choix
 
-
-
-
-
-
-
-
+INSERT INTO fournisseur (NumF, NomF, Statut, VilleF)    --L’insertion de données dans une table s’effectue à l’aide de la commande INSERT INTO. 
+VALUES (5, 'SaintMamet','Dispo', 'Nantes');             --Cette commande permet au choix d’inclure une seule ligne à la base existante ou plusieurs lignes d’un coup.
 
 exercice 5 b--Supprimer tous les produits de couleur noire et de numéros compris entre 100 et 1999
-exercice 5 c--Changer la ville du fournisseur 3 par Mulhous
+
+
+
+
+
+
+
+
+
+
+exercice 5 c--Changer la ville du fournisseur 3 par Mulhouse
 
 
 
