@@ -398,16 +398,14 @@ VALUES (5, 'SaintMamet','Dispo', 'Nantes');             --Cette commande permet 
 
 exercice 5 b--Supprimer tous les produits de couleur noire et de numéros compris entre 100 et 1999
 
-
-
-
-
-
-
-
-
+DELETE FROM produit                                     --La commande DELETE en SQL permet de supprimer des lignes dans une table.
+WHERE (numP BETWEEN 100 AND 1999) AND (couleur = 'Noir')--En utilisant cette commande associé à WHERE il est possible de sélectionner les lignes concernées qui seront supprimées.
 
 exercice 5 c--Changer la ville du fournisseur 3 par Mulhouse
+
+UPDATE fournisseur                                      --La commande UPDATE permet d’effectuer des modifications sur des lignes existantes. 
+SET VilleF = 'Mulhouse'                                 --SET pour effectuer la mise à jour
+WHERE NumF = 3                                          --Très souvent cette commande est utilisée avec WHERE pour spécifier sur quelles lignes doivent porter la ou les modifications.
 
 
 
