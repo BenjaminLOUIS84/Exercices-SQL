@@ -56,7 +56,7 @@ WHERE m.representation_id = r.num_representation                                
 
 exercice 1 d-- Donner la liste des titres des représentations, les lieux et les tarifs pour la journée du 14/09/2014.
 
-SELECT r.titre_representation, p.tarif
+SELECT r.titre_representation,lieu, p.tarif
 FROM representation r, programmer p
 WHERE r.num_representation = p.representation_id
 AND p.date = '2014-09-14'                                                           -- AND Remplace WHERE car on ne peut en mettre q'un
@@ -104,7 +104,6 @@ exercice 2 b-- Quelles sont, parmi l'ensemble des notes, la note la plus haute e
 
 SELECT MAX(e.note), MIN(e.note)                                                     -- MAX() et MIN() sont des fonctions d’agrégation permettent de retourner la valeur maximale et minimale d’une colonne dans un set d’enregistrement.
 FROM evaluer e
-GROUP BY n_etudiant                                                                 -- GROUP BY Permet d'afficher la note max et min de chaque numéro d'étudiant
 
 exercice 2 c-- Quelles sont les moyennes de chaque étudiant dans chacune des matières ? (utilisez CREATE VIEW)
 
@@ -117,33 +116,29 @@ GROUP BY etu.n_etudiant, etu.nom, etu.prenom, m.libellemat                      
 
 exercice 2 d-- Quelles sont les moyennes par matière ? (cf. question c)
 
-CREATE VIEW moyenne_matiere AS
-SELECT m.libellemat, AVG(eva.note) AS moyMat
-FROM matiere m, evaluer eva
-WHERE eva.codemat = m.codemat
+SELECT m.libellemat, AVG(moyenne_etudiant) 
+FROM moyenne_etudiant
 GROUP BY m.libellemat
 
 exercice 2 e-- Quelle est la moyenne générale de chaque étudiant ? (utilisez CREATE VIEW + cf. question 3)
 
 CREATE VIEW moyenne_generale_etudiant AS
-SELECT etu.nom, etu.prenom, AVG(eva.note) AS moyGenEtu
-FROM etudiant etu, evaluer eva
-WHERE etu.n_etudiant = eva.n_etudiant
-GROUP BY etu.nom, etu.prenom                                                -- et on fait cette opération pour chaque étudiant. C'est ce qui permet d'afficher la moyenne pour 1 étudiant donné.
+SELECT etu.nom, etu.prenom,
+SUM(moyenne_etudiant*coeffmat)/SUM(coeffmat) AS moyenne_generale_etudiant
+FROM moyenne_etudiant
+GROUP BY etu.n_etudiant, etu.nom, etu.prenom                                                -- et on fait cette opération pour chaque étudiant. C'est ce qui permet d'afficher la moyenne pour 1 étudiant donné.
 
 exercice 2 f-- Quelle est la moyenne générale de la promotion ? (cf. question e)
 
-CREATE OR REPLACE VIEW moyenne_promo AS
-SELECT AVG(evaluer.note) AS moyennePromo
-FROM evaluer
+SELECT AVG(moyenne_generale_etudiant) 
+FROM moyenne_generale_etudiant
 
 exercice 2 g--Quels sont les étudiants qui ont une moyenne générale supérieure ou égale à la moyenne générale de la promotion ? (cf. question e)
 
-CREATE VIEW moyenne_sup AS
-SELECT etu.prenom, mge.moyGenEtu, mp.moyennePromo                           -- on récupère le prénom de l'étudiant sa moyenne générale ainsi que la moyenne de la promo depuis la précédente View. 
-FROM etudiant etu, moyenne_generale_etudiant mge, moyenne_promo mp
-WHERE mge.moyGenEtu >= mp.moyennePromo                                      -- on créer 2 conditions WHERE comparer la moyenne générale à la moyenne de la promo 
-AND etu.prenom = mge.prenom                                                 -- AND afficher les élèves dont la moyenne générale est supérieur à la moyenne de la promo
+
+SELECT etu.n_etudiant, etu.nom, etu.prenom, moyenne_generale_etudiant                          -- on récupère le prénom de l'étudiant sa moyenne générale ainsi que la moyenne de la promo depuis la précédente View. 
+FROM moyenne_generale_etudiant
+WHERE moyenne_generale_etudiant >= (SELECT AVG(moyenne_generale_etudiant)FROM moyenne_generale_etudiant)                                                       -- on créer 2 conditions WHERE comparer la moyenne générale à la moyenne de la promo t la moyenne générale est supérieur à la moyenne de la promo
 
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
@@ -191,8 +186,7 @@ exercice 3 b--Liste des articles dont le prix d'inventaire est compris entre 100
 
 SELECT a.libelle, a.prixinvent
 FROM articles a
-WHERE a.prixinvent >100
-AND a.prixinvent <300
+WHERE a.prixinvent BETWEEN 100 AND 300
 
 exercice 3 c--Liste des fournisseurs dont on ne connaît pas l'adresse 
 
@@ -345,7 +339,7 @@ exercice 4 h--Nom, prénom et ville des étudiants dont la ville contient la cha
 
 SELECT etu.nom, etu.prenom, etu.ville
 FROM etudiant etu
-WHERE etu.ville LIKE '%||'
+WHERE etu.ville LIKE '%||%'
 
 exercice 4 i--Prénoms des étudiants de nom Dupont, Durand ou Martin
 
@@ -386,16 +380,16 @@ WHERE etu.numetu = n.numetu
 exercice 4 o--Liste des notes en précisant pour chacune le nom et le prénom de l'étudiant qui l'a obtenue et le libellé de la matière concernée
 
 SELECT etu.nom, etu.prenom, n.note, m.libelle
-FROM etudiant etu, notation n, matiere m
+FROM etudiant etu, notation n, matiere m, epreuve ep
 WHERE etu.numetu = n.numetu
 AND m.numepreuve = n.numepreuve
+AND ep.codemat = m.codemat
 
 exercice 4 p--Nom et prénom des étudiants qui ont obtenu au moins une note égale à 20
 
-SELECT etu.nom, etu.prenom, m.libelle, n.note
-FROM etudiant etu, notation n, matiere m
+SELECT DISTINCT etu.nom, etu.prenom
+FROM etudiant etu, notation n
 WHERE etu.numetu = n.numetu
-AND n.numepreuve = m.numepreuve
 AND n.note = 20
 
 exercice 4 q--Moyennes des notes de chaque étudiant (indiquer le nom et le prénom)
@@ -423,16 +417,18 @@ ORDER BY Moyenne DESC
 exercice 4 s--Moyennes des notes pour les matières (indiquer le libellé) comportant plus d'une épreuve
 
 SELECT mat.libelle, ROUND(AVG(n.note), 2) AS Moyenne_Matieres
-FROM matiere mat, notation n
-WHERE mat.numepreuve = n.numepreuve
+FROM matiere mat, notation n, epreuve ep
+WHERE mat.numepreuve = n.numepreuve AND mat.codemat = ep.codemat
 GROUP BY mat.libelle
+HAVING COUNT(DISTINCT ep.numepreuve)>1
 
 exercice 4 t--Moyennes des notes obtenues aux épreuves (indiquer le numéro d'épreuve) où moins de 6 étudiants ont été notés
 
 SELECT ep.numepreuve, ROUND(AVG(n.note), 2) AS Moyenne_Epreuves
-FROM epreuve ep, notation n
-WHERE ep.numepreuve = n.numepreuve
+FROM notation n
+WHERE n.note IS NOT NULL
 GROUP BY ep.numepreuve
+HAVING COUNT(*)<6
 
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////--
 
